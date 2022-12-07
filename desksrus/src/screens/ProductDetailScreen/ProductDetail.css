@@ -1,0 +1,28 @@
+.product {
+    display: flex;
+    width: 100%;
+}
+
+p {
+    font-size: 1.5vmin;
+}
+
+.details {
+    margin: 2rem;
+    justify-items: center;
+}
+
+img {
+    margin: 2rem;
+}
+
+@media screen and (max-width: 820px) {
+    .product {
+        display: block;
+        justify-items: center;
+    }
+
+    img {
+        width: 80%;
+    }
+}

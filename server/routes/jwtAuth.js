@@ -9,7 +9,7 @@ const authorization = require("../middleware/authorization");
 router.post("/register", validInfo, async (req, res) => {
     try {
         const { fname, lname, email, password } = req.body;
-        const user = await pool.query("SELECT * from users WHERE email = $1", [email]);
+        const user = await pool.query("SELECT * from Customer WHERE email = $1", [email]);
 
         if (user.rows.length != 0) {
             return res.status(401).json("User already exist");
@@ -19,7 +19,7 @@ router.post("/register", validInfo, async (req, res) => {
         const salt = await bcrypt.genSalt(saltRound);
         const bcryptPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await pool.query("INSERT INTO users(fname, lname, email, user_password) VALUES($1, $2, $3, $4) RETURNING *",
+        const newUser = await pool.query("INSERT INTO Customer(fname, lname, email, password) VALUES($1, $2, $3, $4) RETURNING *",
             [fname, lname, email, bcryptPassword]
         );
 
@@ -35,7 +35,7 @@ router.post("/login", validInfo, async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
+        const user = await pool.query("SELECT * FROM Customer WHERE email=$1", [email]);
         if (user.rows.length == 0) {
             return res.status(401).json("Invalid Credential");
         }
@@ -56,6 +56,16 @@ router.post("/verify", authorization, (req, res) => {
     try {
         res.json(true);
     } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+router.post("/transactions", (req, res) => {
+    try {
+        const {filter} = req.body();
+        console.log(filter);
+    } catch (error) {
         console.error(err.message);
         res.status(500).send("Server error");
     }
