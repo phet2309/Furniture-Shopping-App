@@ -9,6 +9,7 @@ type Props = {
 }
 
 const Item = ({item, handleAddToCart} : Props) => {
+  console.log(item);
   return ( 
     <Card style={{ width: '18rem' }}>
       <Card.Img variant="top" src={item.image} />

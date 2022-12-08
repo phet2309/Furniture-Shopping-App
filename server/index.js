@@ -9,6 +9,7 @@ app.use(cors());
 // Routes
 app.use("/auth", require("./routes/jwtAuth"));
 app.use("/", require("./routes/customerInfo"));
+app.use("/admin", require("./routes/adminstats"));
 
 app.listen(8000, () => {
     console.log("Server is running on port 8000");

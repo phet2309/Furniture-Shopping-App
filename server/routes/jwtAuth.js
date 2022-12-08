@@ -23,6 +23,7 @@ router.post("/register", validInfo, async (req, res) => {
             [fname, lname, email, bcryptPassword]
         );
 
+        console.log(newUser.rows[0].id);
         const token = jwtGenerator(newUser.rows[0].id);
         return res.json({ token });
     } catch (error) {
@@ -40,13 +41,14 @@ router.post("/login", validInfo, async (req, res) => {
             return res.status(401).json("Invalid Credential");
         }
 
-        const validPassword = await bcrypt.compare(password, user.rows[0].user_password);
+        const validPassword = await bcrypt.compare(password, user.rows[0].password);
         if (!validPassword) {
             return res.status(401).json("Invalid Credential");
         }
-        const token = jwtGenerator(user.rows[0].user_id);
-        return res.json({ token });
-    } catch (error) {
+        const token = jwtGenerator(user.rows[0].cid);
+        const isAdmin = (user.rows[0].usertype==='admin')? true : false;
+        return res.json({ token, isAdmin });
+    } catch (err) {
         console.error(err.message);
         return res.status(500).send("Server error");
     }

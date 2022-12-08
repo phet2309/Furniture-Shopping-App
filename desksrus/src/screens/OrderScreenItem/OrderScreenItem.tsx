@@ -29,7 +29,7 @@ type deliveryCardDetailType = {
 }
 
 
-const OrderScreenItem = ({ setAuth }: Props) => {
+const OrderScreenItem = () => {
     const { id, date } = useParams<{ id?: string, date?: string }>();
     const getOrder = async (): Promise<OrderItemType> => await (await fetch(`http://localhost:8000/orders/${id}/${date}`)).json();
 

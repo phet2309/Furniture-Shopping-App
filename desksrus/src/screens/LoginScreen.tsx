@@ -7,9 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   setAuth: (isAuthenticated : boolean) => void;
+  setIsAdmin: (isAdmin: boolean) => void;
 }
 
-const LoginScreen = ({setAuth} : Props) => {
+const LoginScreen = ({setAuth, setIsAdmin} : Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,7 +28,9 @@ const LoginScreen = ({setAuth} : Props) => {
     const parseRes = await res.json();
     if (parseRes.token) {
       localStorage.setItem("token", parseRes.token);
+      localStorage.setItem("isAdmin", parseRes.isAdmin)
       setAuth(true);
+      if(parseRes.isAdmin) setIsAdmin(true)
     } else {
       setAuth(false);
       toast.error(parseRes);
@@ -59,10 +62,6 @@ const LoginScreen = ({setAuth} : Props) => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)} />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
         </Form.Group>
         <Button variant="primary" type="submit">
           Submit

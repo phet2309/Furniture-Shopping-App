@@ -9,9 +9,13 @@ interface Props {
     setAuth: (isAuthenticated: boolean) => void;
 }
 
-const getProduct = async (id: string): Promise<CartItemType> => await (await fetch(`https://fakestoreapi.com/products/${id}`)).json();
+const token = localStorage.getItem('token');
+console.log(token);
+const getProduct = async (id: string): Promise<CartItemType> => await (await fetch(`http://localhost:8000/products/${id}`,{
+    headers: {'token': `${token}`}
+})).json();
 
-const ProductDetailScreen = ({ setAuth }: Props) => {
+const ProductDetailScreen = () => {
     const { id }: { id: string } = useParams();
     const { data, isLoading, error } = useQuery<CartItemType>(`queryKey${id}`, async () => await getProduct(id));
 
@@ -24,6 +28,7 @@ const ProductDetailScreen = ({ setAuth }: Props) => {
     }
     if (error) return <div>Something went wrong...</div>
 
+    console.log(data);
     return (
         <div className='product'>
             <img src={data?.image} />
